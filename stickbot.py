@@ -4,7 +4,7 @@ from PIL import Image
 
 
 def crop(l,w, im) -> Image:
-    if true:
+    if True:
         print("pp")
     elif (l > w):
         print("cropping top and bottom to fit...")
@@ -17,6 +17,14 @@ def crop(l,w, im) -> Image:
         newbox = (newW-160, 0, newW+160, l)
         re_sized = im.resize((320,320) , box= newbox)
     return re_sized
+
+def square(l,w,im) -> Image:
+    if l == w:
+        resize = im
+    elif l > w:
+        barSize = ((l-w)//2, l)
+    elif w > l:
+        barSize = (w, (w-l)//2)
 
 infile = input("Please input the file path of the image you would like to edit: \n")
 outfile = input("Please input the name you would like to use for the edited image (include path for saving to different folder): \n")
@@ -40,17 +48,22 @@ try:
             print("perfect!")
             re_sized = im
         else:
-            crop = input(f"Error! File dimensions are {l}x{w} and do not match the required dimensions. Would you like to Crop?(Y/n): \n")
-            if crop == "Y":
+            op = input(f"Error! File dimensions are {l}x{w} and do not match the required dimensions. Would you like to Crop?(Y/n): \n")
+            if op == "Y":
                 re_sized = crop(l, w, im)
             else:
-                re_sized = im
+                op = input("Would you like to squash the image to fit (1) or make it square before converting? : \n")
+                if op == "1":
+                    re_sized = im.resize((320,320))
+                else:
+                    re_sized = square(l,w,im)
 
         re_sized.save(outfile , "PNG")
         print("Success! Here is your new file: ")
         time.sleep(2)
         re_sized.show()
-        print("if the crop is bad, type up to move the window up, down to move window down, l to move window left and r to move window right")
+
+        #print("if the crop is bad, type up to move the window up, down to move window down, l to move window left and r to move window right")
 
 
 
